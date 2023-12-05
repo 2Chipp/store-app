@@ -1,0 +1,28 @@
+import express from 'express'
+const app = express();
+import cors from "cors"
+import {connectDB} from "./db.js"
+import userRoute from "./routes/user.js"
+import authRoute from "./routes/auth.js"
+import productRoute from "./routes/product.js"
+import cartRoute from "./routes/cart.js"
+import orderRoute from "./routes/order.js"
+import stripeRoute from "./routes/stripe.js"
+import cookieParser from 'cookie-parser' // convierte las cookies a un objeto json
+
+
+connectDB();
+app.use(cors());
+app.use(express.json());
+app.use(cookieParser()); // permite que las cookies se transformen a un objeto
+
+app.use("/api/auth", authRoute);
+app.use("/api/user", userRoute);
+app.use("/api/products", productRoute);
+app.use("/api/carts", cartRoute);
+app.use("/api/orders", orderRoute);
+app.use("/api/checkout", stripeRoute);
+
+app.listen(process.env.PORT || 3000, () => {
+    console.log("Backend server is running!");
+  });
